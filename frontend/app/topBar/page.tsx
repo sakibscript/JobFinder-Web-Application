@@ -19,7 +19,7 @@ type User = {
   phone?: string;
   resumeUrl?: string;
   Role?: number;
-  image?: string;
+  imageUrl?: string;
   isPremium: boolean;
   expiresAt: Date;
 };
@@ -148,7 +148,7 @@ export default function TopBar({
             ) : (
               <img
                 src={
-                  user.image ||
+                  user.imageUrl ||
                   "https://img.freepik.com/free-vector/illustration-businessman_53876-5856.jpg"
                 }
                 alt="User"

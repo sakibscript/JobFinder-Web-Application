@@ -7,9 +7,6 @@ import EditProfileModal from "./edit-profile/page";
 import TopBar from "../topBar/page";
 import PremiumPaymentModal from "../payment/page";
 
-// At the top of the component
-// import ResumeView from "./resume/page";
-
 type User = {
   jobSeekerId: number;
   fullName: string;
@@ -134,7 +131,6 @@ export default function Dashboard() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("payment") === "success") {
       toast.success("Premium Activated!");
-      // re-fetch user profile to update isPremium
     }
   }, []);
 
@@ -621,10 +617,6 @@ export default function Dashboard() {
             show={showPaymentModal}
             onClose={() => setShowPaymentModal(false)}
           />
-
-          {/* <div className="bg-white/40 p-4 rounded-xl shadow-md backdrop-blur-lg border border-white/20">
-            <ResumeView />
-          </div> */}
         </div>
       </div>
     </div>

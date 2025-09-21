@@ -1,4 +1,3 @@
-// src/config/multer.config.ts
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { BadRequestException } from '@nestjs/common';
@@ -23,7 +22,7 @@ export const resumeUploadConfig = {
     callback(null, true);
   },
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB
+    fileSize: 5 * 1024 * 1024,
   },
 };
 
@@ -49,6 +48,6 @@ export const profileImageUploadConfig = {
     callback(null, true);
   },
   limits: {
-    fileSize: 2 * 1024 * 1024, // 2MB
+    fileSize: 2 * 1024 * 1024,
   },
 };

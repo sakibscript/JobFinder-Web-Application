@@ -55,7 +55,6 @@ export default function HomePage() {
       if (res.data.length > 0) {
         setActiveCategory(res.data[0]);
       }
-      // Fetch jobs for all categories
       res.data.forEach(async (category: string) => {
         const jobRes = await axios.get(
           `http://localhost:3000/jobs/category/${category}`
@@ -113,7 +112,6 @@ export default function HomePage() {
     Business: "bg-indigo-500",
   };
 
-  // Called when 'Apply Job' is clicked
   const handleApplyJob = async (jobId: number) => {
     const token = localStorage.getItem("token");
 
@@ -123,7 +121,6 @@ export default function HomePage() {
     }
 
     try {
-      // Get logged-in job seeker info
       const userRes = await axios.get("http://localhost:3000/job-seekers/me", {
         headers: { Authorization: `Bearer ${token}` },
       });

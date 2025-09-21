@@ -55,7 +55,6 @@ export class JobSeeker {
   @OneToOne(() => Subscription, (subscription) => subscription.jobSeeker)
   subscription: Subscription;
 
-  // src/job-seekers/entities/job-seeker.entity.ts
   @OneToMany(() => Interview, (interview) => interview.jobSeeker)
   interviews: Interview[];
 }

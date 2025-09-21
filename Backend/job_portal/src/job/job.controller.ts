@@ -21,12 +21,6 @@ import { Public } from 'src/Auth/public.decorator';
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
-  // @Public()
-  // @Get('search')
-  // async searchJobs(@Query() searchDto: JobSearchDTO): Promise<Job[]> {
-  //   return this.jobService.searchJobs(searchDto);
-  // }
-
   @Public()
   @Get()
   async getAllJobs(): Promise<Job[]> {
@@ -71,23 +65,4 @@ export class JobController {
   ) {
     return this.jobService.searchJobsByTitle(title, +page, +limit);
   }
-
-  // @Post('save-job')
-  // async saveJob(@Body() saveJobDto: SaveJobDto): Promise<Job> {
-  //   return this.jobService.saveJob(saveJobDto);
-  // }
-
-  // @Get(':seekerId')
-  // async getSavedJobs(
-  //   @Param('seekerId', ParseIntPipe) seekerId: number,
-  // ): Promise<Job[]> {
-  //   return this.jobService.getSavedJobsBySeeker(seekerId);
-  // }
-
-  // @Delete(':savedJobId')
-  // async deleteSavedJob(
-  //   @Param('savedJobId', ParseIntPipe) savedJobId: number,
-  // ): Promise<string> {
-  //   return this.jobService.deleteSavedJob(savedJobId);
-  // }
 }

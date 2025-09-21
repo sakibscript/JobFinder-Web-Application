@@ -14,8 +14,8 @@ export class SSLCommerzSuccessDto {
   readonly verify_key: string;
   readonly cus_email: string;
   readonly cus_name: string;
-  readonly value_a: string; // jobSeekerId
-  readonly value_b: string; // subscriptionId
+  readonly value_a: string;
+  readonly value_b: string;
 }
 
 export class SSLCommerzFailDto {

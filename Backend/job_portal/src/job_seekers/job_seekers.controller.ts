@@ -93,30 +93,6 @@ export class JobSeekersController {
     return this.jobSeekerService.getJobSeekerProfile(req.user.userId);
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Roles(Role.JobSeeker)
-  // @Post('upload-resume/:seekerId')
-  // @UseInterceptors(
-  //   FileInterceptor('file', {
-  //     storage: diskStorage({
-  //       destination: './uploads/resumes',
-  //       filename: (req, file, cb) => {
-  //         const uniqueName = `${Date.now()}-${file.originalname}`;
-  //         cb(null, uniqueName);
-  //       },
-  //     }),
-  //   }),
-  // )
-  // async uploadResume(
-  //   @Param('seekerId', ParseIntPipe) seekerId: number,
-  //   @UploadedFile() file: Express.Multer.File,
-  // ): Promise<JobSeeker> {
-  //   const uploadDto = new UploadResumeDto();
-  //   uploadDto.seekerId = seekerId;
-  //   uploadDto.resume = file.filename;
-
-  //   return this.jobSeekerService.uploadResume(uploadDto);
-  // }
   @UseGuards(JwtAuthGuard)
   @Roles(Role.JobSeeker)
   @Post('upload-resume/:seekerId')
@@ -144,42 +120,8 @@ export class JobSeekersController {
     uploadDto.resume = file.filename;
 
     await this.jobSeekerService.uploadResume(uploadDto);
-    return { filename: file.filename }; // ✅ return filename only
+    return { filename: file.filename };
   }
-
-  // @UseGuards(JwtAuthGuard)
-  // @Roles(Role.JobSeeker)
-  // @Post('upload-image/:seekerId')
-  // @UseInterceptors(
-  //   FileInterceptor('file', {
-  //     storage: diskStorage({
-  //       destination: './uploads/profile-images',
-  //       filename: (req, file, cb) => {
-  //         const uniqueName = `${Date.now()}-${file.originalname}`;
-  //         cb(null, uniqueName);
-  //       },
-  //     }),
-  //     fileFilter: (req, file, cb) => {
-  //       if (!file.mimetype.startsWith('image/')) {
-  //         return cb(
-  //           new BadRequestException('Only image files are allowed!'),
-  //           false,
-  //         );
-  //       }
-  //       cb(null, true);
-  //     },
-  //   }),
-  // )
-  // async uploadImage(
-  //   @Param('seekerId', ParseIntPipe) seekerId: number,
-  //   @UploadedFile() file: Express.Multer.File,
-  // ): Promise<JobSeeker> {
-  //   const uploadDto = new UploadImageDto();
-  //   uploadDto.seekerId = seekerId;
-  //   uploadDto.imageUrl = file.filename;
-
-  //   return this.jobSeekerService.uploadImage(uploadDto);
-  // }
 
   @UseGuards(JwtAuthGuard)
   @Roles(Role.JobSeeker)
@@ -217,34 +159,6 @@ export class JobSeekersController {
     uploadDto.imageUrl = file.filename;
 
     await this.jobSeekerService.uploadImage(uploadDto);
-    return { filename: file.filename }; // ✅ return filename only
+    return { filename: file.filename };
   }
-
-  // @UseGuards(JwtAuthGuard)
-  // @Roles(Role.JobSeeker)
-  // @Post('me/resume')
-  // @UseInterceptors(FileInterceptor('file', resumeUploadConfig))
-  // async uploadResume(@Req() req, @UploadedFile() file: Express.Multer.File) {
-  //   if (!file) {
-  //     throw new BadRequestException('No file uploaded');
-  //   }
-  //   return this.jobSeekerService.updateResume(req.user.sub, file.filename);
-  // }
-
-  // @UseGuards(JwtAuthGuard)
-  // @Roles(Role.JobSeeker)
-  // @Post('me/profile-image')
-  // @UseInterceptors(FileInterceptor('file', profileImageUploadConfig))
-  // async uploadProfileImage(
-  //   @Req() req,
-  //   @UploadedFile() file: Express.Multer.File,
-  // ) {
-  //   if (!file) {
-  //     throw new BadRequestException('No file uploaded');
-  //   }
-  //   return this.jobSeekerService.updateProfileImage(
-  //     req.user.sub,
-  //     file.filename,
-  //   );
-  // }
 }

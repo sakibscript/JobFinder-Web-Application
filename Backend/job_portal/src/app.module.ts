@@ -22,7 +22,7 @@ import { JwtAuthGuard } from './Auth/jwt-auth.guard';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // makes config available everywhere
+      isGlobal: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',

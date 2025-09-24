@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
 
 export class PaymentDTO {
   @IsNotEmpty()
@@ -9,5 +9,22 @@ export class PaymentDTO {
   @IsNumber()
   amount: number;
 
+  @IsNotEmpty()
+  @IsString()
+  fullName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  phone: string;
+
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @IsOptional()
   readonly paymentMethod?: string;
 }

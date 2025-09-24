@@ -47,11 +47,22 @@ export class JobSeekersController {
   async sendCode(@Body('email') email: string) {
     return this.emailVerificationService.sendCode(email);
   }
-
+  @Public()
+  @Post('verify-code')
+  async verifyCode(@Body('email') email: string, @Body('code') code: string) {
+    const isVerified = await this.emailVerificationService.verifyCode(
+      email,
+      code,
+    );
+    if (!isVerified) {
+      throw new BadRequestException('Invalid or expired code.');
+    }
+    return { message: 'Code verified successfully.' };
+  }
   @Public()
   @Post('register')
-  async signup(@Body() dto: CreateJobSeekerDto, @Body('code') code: string) {
-    return this.jobSeekerService.register(dto, code);
+  async signup(@Body() dto: CreateJobSeekerDto) {
+    return this.jobSeekerService.register(dto);
   }
 
   // @Public()

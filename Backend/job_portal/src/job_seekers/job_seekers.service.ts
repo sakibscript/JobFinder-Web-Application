@@ -28,26 +28,22 @@ export class JobSeekersService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(dto: CreateJobSeekerDto, code: string) {
-    const verificationResult = await this.verificationService.verifyCode(
-      dto.email,
-      code,
-    );
+  async register(dto: CreateJobSeekerDto): Promise<JobSeeker> {
     const existingUser = await this.jobSeekerRepo.findOne({
       where: { email: dto.email },
     });
     if (existingUser) {
-      throw new UnauthorizedException('Email is already registered.');
+      throw new BadRequestException('Email is already registered.');
     }
-    if (verificationResult) {
-      const hashedPassword = await bcrypt.hash(dto.password, 10);
-      const user = this.jobSeekerRepo.create({
-        ...dto,
-        password: hashedPassword,
-      });
-      return this.jobSeekerRepo.save(user);
-    }
-    throw new BadRequestException('Email verification failed');
+
+    // Hash the password and create the user
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    const user = this.jobSeekerRepo.create({
+      ...dto,
+      password: hashedPassword,
+    });
+
+    return this.jobSeekerRepo.save(user);
   }
 
   // async findById(id: number) {

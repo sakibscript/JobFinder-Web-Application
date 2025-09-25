@@ -62,7 +62,6 @@ export class JobApplicationsService {
       throw new NotFoundException('Upload your resume first');
     }
 
-    // ✅ Check for duplicate application
     const existing = await this.jobApplicationRepo.findOne({
       where: {
         job: { jobId: dto.jobId },
@@ -98,9 +97,9 @@ export class JobApplicationsService {
   async getRecentApplicationsByJobSeeker(jobSeekerId: number) {
     const apps = await this.jobApplicationRepo.find({
       where: { jobSeeker: { jobSeekerId } },
-      relations: ['job'], // Include job data
-      order: { appliedAt: 'DESC' }, // Sort by recent
-      take: 5, // Limit to most recent 5
+      relations: ['job'],
+      order: { appliedAt: 'DESC' },
+      take: 5,
     });
 
     return apps.map((app) => ({
@@ -135,7 +134,6 @@ export class JobApplicationsService {
     return this.jobApplicationRepo.save(application);
   }
 
-  // src/job-applications/job-applications.service.ts
   async addMessage2(applicationId: number, dto: AddMessageDto) {
     const app = await this.jobApplicationRepo.findOneBy({
       jobApplicationId: applicationId,
@@ -176,7 +174,6 @@ export class JobApplicationsService {
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
   }
-  // job-applications.service.ts
 
   async addMessage(
     jobApplicationId: number,

@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmailVerificationModule } from './email_verification/email_verification.module';
 import { EmailModule } from './email/email.module';
 import { Job } from './Entities/job.entity';
-import { JobModule } from './job/job.module';
+import { JobModule } from './job_/job.module';
 import { JobApplicationsModule } from './job_applications/job_applications.module';
 import { JobApplication } from './Entities/job_application.entity';
 import { PaymentModule } from './payment/payment.module';

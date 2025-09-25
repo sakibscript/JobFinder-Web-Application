@@ -1,11 +1,11 @@
 // src/interviews/interviews.controller.ts
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
-import { InterviewsService } from './interview.service';
+import { InterviewService } from './interview.service';
 import { JwtAuthGuard } from 'src/Auth/jwt-auth.guard';
 
 @Controller('interviews')
-export class InterviewsController {
-  constructor(private readonly interviewsService: InterviewsService) {}
+export class InterviewController {
+  constructor(private readonly interviewsService: InterviewService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('me')

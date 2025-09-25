@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Interview } from 'src/Entities/interview.entity';
 
 @Injectable()
-export class InterviewsService {
+export class InterviewService {
   constructor(
     @InjectRepository(Interview)
     private interviewRepo: Repository<Interview>,

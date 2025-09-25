@@ -1,107 +1,8 @@
-// import {
-//   Controller,
-//   Post,
-//   Body,
-//   Get,
-//   Query,
-//   InternalServerErrorException,
-// } from '@nestjs/common';
-// import { PaymentService } from './payment.service';
-// import { PaymentDTO } from 'src/DTOs/payment.dto';
-// import { Public } from 'src/Auth/public.decorator';
-
-// @Controller('payment')
-// export class PaymentController {
-//   constructor(private readonly paymentService: PaymentService) {}
-
-//   @Post('initiate')
-//   async initiatePayment(@Body() paymentData: PaymentDTO) {
-//     return await this.paymentService.initiatePayment(paymentData);
-//   }
-
-//   @Public()
-//   @Get('success')
-//   async paymentSuccess(@Query('tran_id') tranId: string) {
-//     if (!tranId) {
-//       throw new InternalServerErrorException('Transaction ID not found.');
-//     }
-
-//     const verificationResult = await this.paymentService.verifyPayment(tranId);
-
-//     if (
-//       verificationResult.status === 'VALID' ||
-//       verificationResult.status === 'VALIDATED'
-//     ) {
-//       const statusMessage = await this.paymentService.updatePaymentStatus(
-//         tranId,
-//         'Success',
-//       );
-//       return {
-//         success: true,
-//         message: 'Payment verified and status updated successfully.',
-//         details: statusMessage,
-//       };
-//     } else {
-//       await this.paymentService.updatePaymentStatus(tranId, 'Failed');
-//       return {
-//         success: false,
-//         message: 'Payment verification failed.',
-//         details: verificationResult.failedreason,
-//       };
-//     }
-//   }
-
-//   @Public()
-//   @Post('ipn')
-//   async paymentIpn(@Body() body: any) {
-//     const { tran_id, status } = body;
-//     if (!tran_id || !status) {
-//       return 'Invalid IPN request';
-//     }
-
-//     const verificationResult = await this.paymentService.verifyPayment(tran_id);
-
-//     if (
-//       verificationResult.status === 'VALID' ||
-//       verificationResult.status === 'VALIDATED'
-//     ) {
-//       const result = await this.paymentService.updatePaymentStatus(
-//         tran_id,
-//         'Success',
-//       );
-//       return { message: 'IPN processed successfully', details: result };
-//     } else {
-//       const result = await this.paymentService.updatePaymentStatus(
-//         tran_id,
-//         'Failed',
-//       );
-//       return { message: 'IPN verification failed', details: result };
-//     }
-//   }
-
-//   @Get('fail')
-//   async paymentFail(@Query('tran_id') tran_id: string) {
-//     const result = await this.paymentService.updatePaymentStatus(
-//       tran_id,
-//       'Failed',
-//     );
-//     return { message: 'Payment failed', details: result };
-//   }
-
-//   @Get('cancel')
-//   async paymentCancel(@Query('tran_id') tran_id: string) {
-//     const result = await this.paymentService.updatePaymentStatus(
-//       tran_id,
-//       'Cancelled',
-//     );
-//     return { message: 'Payment cancelled', details: result };
-//   }
-// }
-import { Controller, Post, Body, Get, Query, Res } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Res, Req } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { PaymentDTO } from 'src/DTOs/payment.dto';
 import { Public } from 'src/Auth/public.decorator';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 
 @Controller('payment')
 export class PaymentController {
@@ -113,53 +14,107 @@ export class PaymentController {
   }
 
   @Public()
-  @Get('success-redirect')
-  async successRedirect(
-    @Query('tran_id') tranId: string,
-    @Res() res: Response,
-  ) {
-    const verification = await this.paymentService.verifyPayment(tranId);
+  @Post('success')
+  async paymentSuccess(@Body() body: any, @Res() res: Response) {
+    try {
+      const tranId = body.tran_id || body.transaction_id;
 
-    if (
-      verification.status === 'VALID' ||
-      verification.status === 'VALIDATED'
-    ) {
-      await this.paymentService.updatePaymentStatus(tranId, 'Success');
-      // Redirect directly to frontend dashboard
-      return res.redirect(`${process.env.FRONTEND_URL}/dashboard?paid=success`);
-    } else {
-      await this.paymentService.updatePaymentStatus(tranId, 'Failed');
+      if (!tranId) {
+        return res.redirect(
+          `${process.env.FRONTEND_URL}/payment-failed?reason=no_transaction_id`,
+        );
+      }
+
+      await this.paymentService.updatePaymentStatus(
+        tranId,
+        'success',
+        body.bank_tran_id,
+      );
+
       return res.redirect(
-        `${process.env.FRONTEND_URL}/payment-failed?reason=${verification.failedreason}`,
+        `${process.env.FRONTEND_URL}/dashboard?payment=success&transaction_id=${tranId}`,
+      );
+    } catch (error) {
+      return res.redirect(
+        `${process.env.FRONTEND_URL}/payment-failed?reason=server_error`,
       );
     }
   }
 
   @Public()
+  @Post('fail')
+  async paymentFail(@Body() body: any, @Res() res: Response) {
+    const tranId = body.tran_id || body.transaction_id;
+    if (tranId) {
+      await this.paymentService.updatePaymentStatus(tranId, 'failed');
+    }
+
+    return res.redirect(
+      `${process.env.FRONTEND_URL}/payment-failed?reason=payment_declined&transaction_id=${tranId || 'unknown'}`,
+    );
+  }
+
+  @Public()
+  @Post('cancel')
+  async paymentCancel(@Body() body: any, @Res() res: Response) {
+    const tranId = body.tran_id || body.transaction_id;
+    if (tranId) {
+      await this.paymentService.updatePaymentStatus(tranId, 'cancelled');
+    }
+
+    return res.redirect(
+      `${process.env.FRONTEND_URL}/payment-cancelled?transaction_id=${tranId || 'unknown'}`,
+    );
+  }
+
+  @Public()
   @Post('ipn')
-  async paymentIpn(@Body() body: any) {
-    const { tran_id, status } = body;
-    if (!tran_id || !status) return 'Invalid IPN';
+  async paymentIpn(@Body() body: any, @Res() res: Response) {
+    try {
+      const { tran_id, status, bank_tran_id } = body;
 
-    const verification = await this.paymentService.verifyPayment(tran_id);
+      if (tran_id && status) {
+        await this.paymentService.updatePaymentStatus(
+          tran_id,
+          status.toLowerCase(),
+          bank_tran_id,
+        );
+      }
 
-    if (
-      verification.status === 'VALID' ||
-      verification.status === 'VALIDATED'
-    ) {
-      return this.paymentService.updatePaymentStatus(tran_id, 'Success');
-    } else {
-      return this.paymentService.updatePaymentStatus(tran_id, 'Failed');
+      return res.status(200).send('IPN processed');
+    } catch (error) {
+      console.error('IPN processing error:', error);
+      return res.status(500).send('IPN processing failed');
     }
   }
 
-  @Get('fail')
-  async paymentFail(@Query('tran_id') tran_id: string) {
-    return this.paymentService.updatePaymentStatus(tran_id, 'Failed');
+  @Public()
+  @Get('test-success')
+  async testSuccessRedirect(
+    @Query('tran_id') tranId: string,
+    @Res() res: Response,
+  ) {
+    if (!tranId) {
+      tranId = 'TEST_' + Date.now();
+    }
+
+    await this.paymentService.updatePaymentStatus(tranId, 'success');
+    return res.redirect(
+      `${process.env.FRONTEND_URL}/dashboard?payment=success&transaction_id=${tranId}`,
+    );
   }
 
-  @Get('cancel')
-  async paymentCancel(@Query('tran_id') tran_id: string) {
-    return this.paymentService.updatePaymentStatus(tran_id, 'Cancelled');
+  @Public()
+  @Get('test-fail')
+  async testFailRedirect(
+    @Query('tran_id') tranId: string,
+    @Res() res: Response,
+  ) {
+    if (tranId) {
+      await this.paymentService.updatePaymentStatus(tranId, 'failed');
+    }
+    return res.redirect(
+      `${process.env.FRONTEND_URL}/payment-failed?reason=test_failure&transaction_id=${tranId || 'test'}`,
+    );
   }
 }

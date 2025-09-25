@@ -2,15 +2,17 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  CreateDateColumn,
+  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { JobSeeker } from './job_seeker.entity';
 
-@Entity()
+@Entity('subscriptions')
 export class Subscription {
   @PrimaryGeneratedColumn()
-  id: number;
+  subscriptionId: number;
 
   @Column()
   jobSeekerId: number;
@@ -21,7 +23,15 @@ export class Subscription {
   @Column({ type: 'timestamp' })
   expiresAt: Date;
 
-  @ManyToOne(() => JobSeeker, (jobSeeker) => jobSeeker.subscription)
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @ManyToOne(() => JobSeeker, (jobSeeker) => jobSeeker.subscription, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'jobSeekerId' })
   jobSeeker: JobSeeker;
 }

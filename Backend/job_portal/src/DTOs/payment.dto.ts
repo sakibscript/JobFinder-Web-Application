@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsOptional,
+  IsEnum,
+} from 'class-validator';
 
 export class PaymentDTO {
   @IsNotEmpty()
@@ -26,5 +32,10 @@ export class PaymentDTO {
   address?: string;
 
   @IsOptional()
-  readonly paymentMethod?: string;
+  @IsString()
+  plan?: string;
+
+  @IsOptional()
+  @IsEnum(['card', 'mobile'])
+  paymentMethod?: string;
 }

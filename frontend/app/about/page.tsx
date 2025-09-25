@@ -1,5 +1,5 @@
 "use client";
-import { JSX, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FaSearch, FaUser, FaChartLine, FaEnvelope } from "react-icons/fa";
 
 const AboutSection = () => {

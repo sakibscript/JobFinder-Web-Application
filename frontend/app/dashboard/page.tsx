@@ -200,7 +200,6 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50 font-sans relative">
       <Toaster position="top-center" />
 
-      {/* Background with subtle gradient and pattern */}
       <div className="absolute inset-0 z-0 bg-white" />
       <div
         className="absolute inset-0 z-0 opacity-10"
@@ -538,43 +537,202 @@ export default function Dashboard() {
             </div>
 
             {/* Premium Subscription */}
-            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 transition-all duration-300 transform hover:scale-[1.01]">
-              <h4 className="font-bold text-xl text-gray-800 mb-4">
-                Premium Subscription
-              </h4>
-              {user?.isPremium ? (
-                <div className="text-sm text-green-700 space-y-2">
-                  <p className="font-semibold">🌟 You are a Premium Member</p>
-                  <ul className="list-disc list-inside text-gray-600">
-                    <li>Access to exclusive jobs</li>
-                    <li>Priority application review</li>
-                    <li>Premium-only webinars/workshops</li>
-                  </ul>
-                  <p className="text-xs text-gray-500 mt-2">
-                    Your subscription is active until:{" "}
-                    <span className="font-semibold text-blue-700">
-                      {new Date(user.expiresAt).toLocaleDateString()}
-                    </span>
-                  </p>
+            <div className="bg-gradient-to-br from-white to-blue-50 p-6 rounded-2xl shadow-xl border border-blue-100/50 transition-all duration-500 transform hover:scale-[1.02] hover:shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full -mr-16 -mt-16"></div>
+
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-bold text-xl text-gray-800 flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full animate-pulse"></div>
+                    <span>Premium Subscription</span>
+                  </h4>
                 </div>
-              ) : (
-                <div className="text-sm text-gray-800 space-y-2">
-                  <p className="font-semibold text-yellow-600">
-                    You're using a free account
-                  </p>
-                  <ul className="list-disc list-inside text-gray-600">
-                    <li>Upgrade for exclusive job posts</li>
-                    <li>Attend premium webinars</li>
-                    <li>Boost your profile visibility</li>
-                  </ul>
-                  <button
-                    onClick={() => setShowPaymentModal(true)}
-                    className="mt-4 w-full py-3 bg-yellow-500 text-white rounded-xl font-semibold shadow-md hover:bg-yellow-600 transition-colors duration-300"
-                  >
-                    Upgrade to Premium
-                  </button>
-                </div>
-              )}
+
+                {user?.isPremium ? (
+                  <div className="text-sm space-y-4">
+                    <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg border border-green-100">
+                      <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <svg
+                          className="w-5 h-5 text-green-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-green-800">
+                          🌟 You're a Premium Member!
+                        </p>
+                        <p className="text-green-700 text-sm">
+                          Unlock exclusive benefits and priority support.
+                        </p>
+                      </div>
+                    </div>
+
+                    <ul className="space-y-2 text-gray-600">
+                      <li className="flex items-center space-x-3">
+                        <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                          <svg
+                            className="w-3 h-3 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <span>Access to exclusive jobs</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                          <svg
+                            className="w-3 h-3 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <span>Priority application review</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <div className="w-5 h-5 bg-blue-100 rounded-full flex items-center justify-center">
+                          <svg
+                            className="w-3 h-3 text-blue-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <span>Premium-only webinars & workshops</span>
+                      </li>
+                    </ul>
+
+                    <div className="pt-4 border-t border-blue-100/50 mt-4">
+                      <p className="text-xs text-gray-500 mb-2">
+                        Subscription active until:
+                      </p>
+                      <p className="font-semibold text-blue-700 text-sm">
+                        {new Date(user.expiresAt).toLocaleDateString()}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        toast("Subscription management coming soon!");
+                      }}
+                      className="mt-4 w-full py-2.5 bg-blue-600 text-white rounded-xl font-semibold shadow-md hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-0.5"
+                    >
+                      Manage Subscription
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-sm space-y-4">
+                    <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+                      <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <svg
+                          className="w-5 h-5 text-yellow-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-yellow-800">
+                          Free Account Active
+                        </p>
+                        <p className="text-yellow-700 text-sm">
+                          Upgrade to unlock premium features.
+                        </p>
+                      </div>
+                    </div>
+
+                    <ul className="space-y-2 text-gray-600">
+                      <li className="flex items-center space-x-3">
+                        <div className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center">
+                          <svg
+                            className="w-3 h-3 text-gray-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <span>Access to exclusive jobs</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <div className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center">
+                          <svg
+                            className="w-3 h-3 text-gray-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <span>Priority application review</span>
+                      </li>
+                      <li className="flex items-center space-x-3">
+                        <div className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center">
+                          <svg
+                            className="w-3 h-3 text-gray-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                        <span>Premium-only webinars & workshops</span>
+                      </li>
+                    </ul>
+
+                    <button
+                      onClick={() => setShowPaymentModal(true)}
+                      className="mt-4 w-full py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-xl font-semibold shadow-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-300 transform hover:-translate-y-0.5"
+                    >
+                      Upgrade to Premium
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
